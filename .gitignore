@@ -1,0 +1,6 @@
+.DS_Store
+__pycache__/
+*.pyc
+
+# 作品固有ノウハウ入りスクリプト（Private repo のみで管理・公開版除外）
+ykz_*.jsx
