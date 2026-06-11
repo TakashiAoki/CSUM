@@ -23,7 +23,6 @@ if ( app.project.activeItem != null && app.project.activeItem instanceof CompIte
 	
 	if ( flag_apply == true )
 	{
-		loadWindowOffset( curScriptName , "cfxDlg" );
 		BuildAndShowDialog();//ダイアログ表示	
 		if ( Btnon == "OK" )
 		{
@@ -35,32 +34,24 @@ if ( app.project.activeItem != null && app.project.activeItem instanceof CompIte
 }
 // **** FUNCTION ******************************************************************************************************************
 //		ウィンドウ位置読み込み
-		function loadWindowOffset( scriptName , windowName )
+		function loadWindowLocation( windowName, win )
 {
-		var sectionName = "CSUMCC " + scriptName;
-		var sectionKey = windowName + " Window Offset";
-		
-		var loadflag = app.settings.haveSetting( sectionName , sectionKey );
-		
-		if ( loadflag == true )
+		var sectionName = "CSUMCC " + curScriptName;
+		var sectionKey = windowName + " Window Location";
+		if ( app.settings.haveSetting( sectionName, sectionKey ) )
 		{
-			windowOffset = app.settings.getSetting( sectionName , sectionKey ).split(",");
+			var curLocation = app.settings.getSetting( sectionName, sectionKey ).split( "," );
+			win.location = [ Number( curLocation[0] ), Number( curLocation[1] ) ];
 		}
-		else
-		{
-			var saveValue = "0,0,0,0";
-			app.settings.saveSetting( sectionName , sectionKey , saveValue );
-			windowOffset = saveValue.split(",");
-		}
+		else { win.center(); }
 }
 // **** FUNCTION ******************************************************************************************************************
 //		ウィンドウ位置記憶
-		function saveWindowOffset( scriptName , windowName , windowAlgebra )
+		function saveWindowLocation( windowName, win )
 {
-		var sectionName = "CSUMCC " + scriptName;
-		var sectionKey = windowName + " Window Offset";
-		var saveValue = windowAlgebra.bounds[0]+","+windowAlgebra.bounds[1]+","+windowAlgebra.bounds[0]+","+windowAlgebra.bounds[1];
-		app.settings.saveSetting( sectionName , sectionKey , saveValue );
+		var sectionName = "CSUMCC " + curScriptName;
+		var sectionKey = windowName + " Window Location";
+		app.settings.saveSetting( sectionName, sectionKey, win.location[0] + "," + win.location[1] );
 }
 // **** FUNCTION ******************************************************************************************************************
 //		ダイアログ表示
@@ -68,7 +59,7 @@ if ( app.project.activeItem != null && app.project.activeItem instanceof CompIte
 {
 		var addHight = 24;
 		
-		cfxDlg = new Window ( "dialog" , curScriptName , [0,0,288,104+addHight*5] + windowOffset );
+		cfxDlg = new Window ( "dialog" , curScriptName , [0,0,288,104+addHight*5] );
 		
 		modePnl = cfxDlg.add( "panel" , [16,16,272,52+addHight*5] , "Mode" );
 		
@@ -84,8 +75,8 @@ if ( app.project.activeItem != null && app.project.activeItem instanceof CompIte
 		cancelBtn.onClick = function() { Btnon = "Cancel"; cfxDlg.close(); }
 		okBtn.onClick = function() { Btnon = "OK"; cfxDlg.close(); }
 		
-		cfxDlg.onMove = function() { saveWindowOffset( curScriptName , "cfxDlg" , cfxDlg ) }
-		if ( windowOffset.toString() == "0,0,0,0" ) { cfxDlg.center(); }
+		cfxDlg.onMove = function() { saveWindowLocation( "cfxDlg", cfxDlg ) }
+		loadWindowLocation( "cfxDlg", cfxDlg );
 		cfxDlg.show();
 }
 // **** FUNCTION ******************************************************************************************************************

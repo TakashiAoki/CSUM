@@ -358,32 +358,24 @@ var curScriptName = "BatchRender";
 }
 // **** FUNCTION ******************************************************************************************************************
 //		ウィンドウ位置読み込み
-		function loadWindowOffset( scriptName , windowName )
+		function loadWindowLocation( windowName, win )
 {
-		var sectionName = "CSUMCC " + scriptName;
-		var sectionKey = windowName + " Window Offset";
-		
-		var loadflag = app.settings.haveSetting( sectionName , sectionKey );
-		
-		if ( loadflag == true )
+		var sectionName = "CSUMCC " + curScriptName;
+		var sectionKey = windowName + " Window Location";
+		if ( app.settings.haveSetting( sectionName, sectionKey ) )
 		{
-			windowOffset = app.settings.getSetting( sectionName , sectionKey ).split(",");
+			var curLocation = app.settings.getSetting( sectionName, sectionKey ).split( "," );
+			win.location = [ Number( curLocation[0] ), Number( curLocation[1] ) ];
 		}
-		else
-		{
-			var saveValue = "0,0,0,0";
-			app.settings.saveSetting( sectionName , sectionKey , saveValue );
-			windowOffset = saveValue.split(",");
-		}
+		else { win.center(); }
 }
 // **** FUNCTION ******************************************************************************************************************
 //		ウィンドウ位置記憶
-		function saveWindowOffset( scriptName , windowName , windowAlgebra )
+		function saveWindowLocation( windowName, win )
 {
-		var sectionName = "CSUMCC " + scriptName;
-		var sectionKey = windowName + " Window Offset";
-		var saveValue = windowAlgebra.bounds[0]+","+windowAlgebra.bounds[1]+","+windowAlgebra.bounds[0]+","+windowAlgebra.bounds[1];
-		app.settings.saveSetting( sectionName , sectionKey , saveValue );
+		var sectionName = "CSUMCC " + curScriptName;
+		var sectionKey = windowName + " Window Location";
+		app.settings.saveSetting( sectionName, sectionKey, win.location[0] + "," + win.location[1] );
 }
 // **** FUNCTION ******************************************************************************************************************
 //		レンダリング保存先ディレクトリ読み込み
@@ -419,9 +411,8 @@ var curScriptName = "BatchRender";
 //		ダイアログ表示
 		function BuildAndShowDialog()
 {
-		loadWindowOffset( "Batch Render" , "brDlg" );
 		loadSaveDirectory( "Batch Render" , "My Save Directory" );
-		brDlg = new Window ( "dialog" , curScriptName , [0,0,568,400] + windowOffset );
+		brDlg = new Window ( "dialog" , curScriptName , [0,0,568,400] );
 			
 		compNameCaption = brDlg.add( "statictext" , [16,16,240,36] , "Composition Name :" ); compNameCaption.justify="right";
 		compName = brDlg.add( "statictext" , [250,16,552,36] , targetCompName );
@@ -478,8 +469,8 @@ var curScriptName = "BatchRender";
 		addQueueBtn.onClick = function() { Btnon = "Add Queue"; brDlg.close(); }
 		collectFilesBtn.onClick = function() { Btnon = "Collect Files"; brDlg.close(); }
 		brDlg.onShow = function() { collectFilesBtn.active = true; }
-		brDlg.onMove = function() { saveWindowOffset( "Batch Render" , "brDlg" , brDlg ) }
-		if ( windowOffset.toString() == "0,0,0,0" ) { brDlg.center(); }
+		brDlg.onMove = function() { saveWindowLocation( "brDlg", brDlg ) }
+		loadWindowLocation( "brDlg", brDlg );
 		brDlg.show();
 }
 // **** FUNCTION ******************************************************************************************************************

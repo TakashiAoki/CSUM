@@ -201,32 +201,24 @@ var curScriptName = "StartSetUp";
 }
 // **** FUNCTION ******************************************************************************************************************
 //		ウィンドウ位置読み込み
-		function loadWindowOffset( scriptName , windowName )
+		function loadWindowLocation( windowName, win )
 {
-		var sectionName = "CSUMCC " + scriptName;
-		var sectionKey = windowName + " Window Offset";
-		
-		var loadflag = app.settings.haveSetting( sectionName , sectionKey );
-		
-		if ( loadflag == true )
+		var sectionName = "CSUMCC " + curScriptName;
+		var sectionKey = windowName + " Window Location";
+		if ( app.settings.haveSetting( sectionName, sectionKey ) )
 		{
-			windowOffset = app.settings.getSetting( sectionName , sectionKey ).split(",");
+			var curLocation = app.settings.getSetting( sectionName, sectionKey ).split( "," );
+			win.location = [ Number( curLocation[0] ), Number( curLocation[1] ) ];
 		}
-		else
-		{
-			var saveValue = "0,0,0,0";
-			app.settings.saveSetting( sectionName , sectionKey , saveValue );
-			windowOffset = saveValue.split(",");
-		}
+		else { win.center(); }
 }
 // **** FUNCTION ******************************************************************************************************************
 //		ウィンドウ位置記憶
-		function saveWindowOffset( scriptName , windowName , windowAlgebra )
+		function saveWindowLocation( windowName, win )
 {
-		var sectionName = "CSUMCC " + scriptName;
-		var sectionKey = windowName + " Window Offset";
-		var saveValue = windowAlgebra.bounds[0]+","+windowAlgebra.bounds[1]+","+windowAlgebra.bounds[0]+","+windowAlgebra.bounds[1];
-		app.settings.saveSetting( sectionName , sectionKey , saveValue );
+		var sectionName = "CSUMCC " + curScriptName;
+		var sectionKey = windowName + " Window Location";
+		app.settings.saveSetting( sectionName, sectionKey, win.location[0] + "," + win.location[1] );
 }
 // **** FUNCTION ******************************************************************************************************************
 //		ダイアログ表示
@@ -237,7 +229,6 @@ var curScriptName = "StartSetUp";
 		centerCaption = new Array();
 		compDurationEdit = new Array();
 		compDurationCaption = new Array();
-		loadWindowOffset( "Start SetUp" , "ssDlg" );
 		
 		var addCutDlgHight = 36;
 		if ( getCurProjectCutNum <= numBuildCutLimit )
@@ -245,7 +236,7 @@ var curScriptName = "StartSetUp";
 		else
 		{ var addDlgHight = addCutDlgHight*numBuildCutLimit; }
 		
-		ssDlg = new Window ( "dialog" , "Start SetUp" , [0,0,448,168+addDlgHight] + windowOffset );
+		ssDlg = new Window ( "dialog" , "Start SetUp" , [0,0,448,168+addDlgHight] );
 		projectNameCaption = ssDlg.add( "statictext" , [68,16,158,36] , " Project Name :" ); projectNameCaption.justify = "left";
 		projectNameEdit = ssDlg.add( "edittext" , [168,13.5,384,35.5] , getCurProjectName ); projectNameEdit.justify = "left";
 		
@@ -289,8 +280,8 @@ var curScriptName = "StartSetUp";
 		cancelBtn.onClick = function() { Btnon = "Cancel"; ssDlg.close(); }
 		okBtn.onClick = function() { Btnon = "OK"; ssDlg.close(); }
 		ssDlg.onShow = function() { compDurationEdit[0].active = true; }
-		ssDlg.onMove = function() { saveWindowOffset( "Start SetUp" , "ssDlg" , ssDlg ) }
-		if ( windowOffset.toString() == "0,0,0,0" ) { ssDlg.center(); }
+		ssDlg.onMove = function() { saveWindowLocation( "ssDlg", ssDlg ) }
+		loadWindowLocation( "ssDlg", ssDlg );
 		ssDlg.show();
 }
 

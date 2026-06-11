@@ -33,7 +33,6 @@ if ( !flag )
 		if ( !flag ) codeCollation();
 		if ( !flag ) CSUMProjectFileCheck();
 		if ( !flag ) {
-							loadWindowOffset( "Edit Comp Settings" , "ecsDlg" );
 							BuildAndShowDialog();
 							getItem = null;
 						}
@@ -105,32 +104,24 @@ if ( !flag )
 }
 // **** FUNCTION ******************************************************************************************************************
 //		ウィンドウ位置読み込み
-		function loadWindowOffset( scriptName , windowName )
+		function loadWindowLocation( windowName, win )
 {
-		var sectionName = "CSUMCC " + scriptName;
-		var sectionKey = windowName + " Window Offset";
-		
-		var loadflag = app.settings.haveSetting( sectionName , sectionKey );
-		
-		if ( loadflag == true )
+		var sectionName = "CSUMCC " + curScriptName;
+		var sectionKey = windowName + " Window Location";
+		if ( app.settings.haveSetting( sectionName, sectionKey ) )
 		{
-			windowOffset = app.settings.getSetting( sectionName , sectionKey ).split(",");
+			var curLocation = app.settings.getSetting( sectionName, sectionKey ).split( "," );
+			win.location = [ Number( curLocation[0] ), Number( curLocation[1] ) ];
 		}
-		else
-		{
-			var saveValue = "0,0,0,0";
-			app.settings.saveSetting( sectionName , sectionKey , saveValue );
-			windowOffset = saveValue.split(",");
-		}
+		else { win.center(); }
 }
 // **** FUNCTION ******************************************************************************************************************
 //		ウィンドウ位置記憶
-		function saveWindowOffset( scriptName , windowName , windowAlgebra )
+		function saveWindowLocation( windowName, win )
 {
-		var sectionName = "CSUMCC " + scriptName;
-		var sectionKey = windowName + " Window Offset";
-		var saveValue = windowAlgebra.bounds[0]+","+windowAlgebra.bounds[1]+","+windowAlgebra.bounds[0]+","+windowAlgebra.bounds[1];
-		app.settings.saveSetting( sectionName , sectionKey , saveValue );
+		var sectionName = "CSUMCC " + curScriptName;
+		var sectionKey = windowName + " Window Location";
+		app.settings.saveSetting( sectionName, sectionKey, win.location[0] + "," + win.location[1] );
 }
 // **** FUNCTION ******************************************************************************************************************
 //		アクティブコンポ検出
@@ -281,7 +272,7 @@ if ( !flag )
 //		ダイアログ表示
 		function BuildAndShowDialog()
 {
-		ecsDlg = new Window ( "dialog" , "Edit Comp Settings" , [0,0,448,290] + windowOffset );
+		ecsDlg = new Window ( "dialog" , "Edit Comp Settings" , [0,0,448,290] );
 		
 		compNameCaption = ecsDlg.add( "statictext" , [16,16,180,36] , "Composition Name :" ); compNameCaption.justify="right";
 		compName = ecsDlg.add( "statictext" , [190,16,432,36] , targetCompName );
@@ -325,8 +316,8 @@ if ( !flag )
 		cancelBtn.onClick = function() { Btnon = "Cancel"; ecsDlg.close(); }
 		okBtn.onClick = function() { Btnon = "OK"; ecsDlg.close(); }
 		ecsDlg.onShow = function() { compDurationEdit.active = true; }
-		ecsDlg.onMove = function() { saveWindowOffset( "Edit Comp Settings" , "ecsDlg" , ecsDlg ) }
-		if ( windowOffset.toString() == "0,0,0,0" ) { ecsDlg.center(); }
+		ecsDlg.onMove = function() { saveWindowLocation( "ecsDlg", ecsDlg ) }
+		loadWindowLocation( "ecsDlg", ecsDlg );
 		ecsDlg.show();
 }
 // **** FUNCTION ******************************************************************************************************************

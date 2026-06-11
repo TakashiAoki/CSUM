@@ -23,11 +23,9 @@
 	var Btnon              = "Cancel";;// ダイアログを×で閉じても安全に扱えるよう初期化
 	var goToTime           = 0;
 	var oneSheetDuration   = "144";
-	var windowOffset       = [ 0, 0, 0, 0 ];
 	var gttDlg, absRbtn, relaRbtn, curTimeEdit, oneSheetDurationEdit;
 
 	loadOneSheetDuration( "CSUM Go to Time", "gttDlg" );
-	loadWindowOffset    ( "CSUM Go to Time", "gttDlg" );
 	BuildAndShowDialog();
 
 	if ( Btnon == "OK" ) {
@@ -110,31 +108,31 @@
 
 	// **** FUNCTION ******************************************************************************************************************
 	//		ウィンドウ位置読み込み
-	function loadWindowOffset( scriptName, windowName ) {
-		var sectionName = "CSUMCC " + scriptName;
-		var sectionKey  = windowName + " Window Offset";
-		if ( app.settings.haveSetting( sectionName, sectionKey ) ) {
-			windowOffset = app.settings.getSetting( sectionName, sectionKey ).split( "," );
-		} else {
-			var saveValue = "0,0,0,0";
-			app.settings.saveSetting( sectionName, sectionKey, saveValue );
-			windowOffset = saveValue.split( "," );
+		function loadWindowLocation( windowName, win )
+{
+		var sectionName = "CSUMCC " + curScriptName;
+		var sectionKey = windowName + " Window Location";
+		if ( app.settings.haveSetting( sectionName, sectionKey ) )
+		{
+			var curLocation = app.settings.getSetting( sectionName, sectionKey ).split( "," );
+			win.location = [ Number( curLocation[0] ), Number( curLocation[1] ) ];
 		}
-	}
+		else { win.center(); }
+}
 
 	// **** FUNCTION ******************************************************************************************************************
 	//		ウィンドウ位置記憶
-	function saveWindowOffset( scriptName, windowName, win ) {
-		var sectionName = "CSUMCC " + scriptName;
-		var sectionKey  = windowName + " Window Offset";
-		var saveValue = win.bounds[ 0 ] + "," + win.bounds[ 1 ] + "," + win.bounds[ 0 ] + "," + win.bounds[ 1 ];
-		app.settings.saveSetting( sectionName, sectionKey, saveValue );
-	}
+		function saveWindowLocation( windowName, win )
+{
+		var sectionName = "CSUMCC " + curScriptName;
+		var sectionKey = windowName + " Window Location";
+		app.settings.saveSetting( sectionName, sectionKey, win.location[0] + "," + win.location[1] );
+}
 
 	// **** FUNCTION ******************************************************************************************************************
 	//		ダイアログ表示
 	function BuildAndShowDialog() {
-		gttDlg = new Window( "dialog", "CSUM Go to Time", [ 0, 0, 288, 204 ] + windowOffset );
+		gttDlg = new Window( "dialog", "CSUM Go to Time", [ 0, 0, 288, 204 ] );
 
 		var modePnl = gttDlg.add( "panel", [ 16, 16, 272, 60 ], "Mode" );
 			absRbtn  = modePnl.add( "radiobutton", [  36, 8, 108, 28 ], "Absolute" ); absRbtn.value = true;
@@ -159,9 +157,9 @@
 		cancelBtn.onClick = function () { Btnon = "Cancel"; gttDlg.close(); };
 		okBtn    .onClick = function () { Btnon = "OK"    ; gttDlg.close(); };
 		gttDlg.onShow = function () { curTimeEdit.active = true; };
-		gttDlg.onMove = function () { saveWindowOffset( "CSUM Go to Time", "gttDlg", gttDlg ); };
+		gttDlg.onMove = function () { saveWindowLocation( "gttDlg", gttDlg ); };
 
-		if ( windowOffset.toString() == "0,0,0,0" ) { gttDlg.center(); }
+		loadWindowLocation( "gttDlg", gttDlg );
 		gttDlg.show();
 	}
 
