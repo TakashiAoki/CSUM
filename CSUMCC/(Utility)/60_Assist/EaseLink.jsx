@@ -1,10 +1,10 @@
 ﻿// ============================================
 // Script Name : EaseLink
-// Version     : v3.3
+// Version     : v3.4
 // 仕様        : 選択プロパティのキー補間をスライダ制御(0〜100)に同期。#EaseLinkタグ・複数スライダ・コンポまたぎリンク対応
 // Copyright   : Over Ray Studio
 // Author      : Takashi Aoki
-// LastUpdate  : 2026-06-11
+// LastUpdate  : 2026-06-16
 // ============================================
 
 var curScriptName = "EaseLink";
@@ -16,6 +16,10 @@ scriptExecute( myCSUMCCToolsFolder.fsName + "/" + "getSelectedProperty.jsx" );
 if ( selectPropertyList.length > 0 )
 {
 	scriptExecute( myCSUMCCToolsFolder.fsName + "/" + "getSelectedLayer.jsx" );
+
+	// 旧(Tools)環境でも単独動作するよう activeComp を再取得（旧getSelectedLayerは未定義→他ツールの無効グローバルを掴む事故を防ぐ）
+	activeComp = ( app.project.activeItem instanceof CompItem ) ? app.project.activeItem : null;
+	activeCompName = ( activeComp != null ) ? activeComp.name : "";
 
 	var sliderList = getProjectSliderList();
 	var selectIndex = showSliderDialog( sliderList );
