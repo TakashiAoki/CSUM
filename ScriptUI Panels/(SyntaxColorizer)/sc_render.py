@@ -19,13 +19,17 @@ def main():
 	ap.add_argument("--leading", type=int, default=0, help="行高(0=size*1.3)")
 	ap.add_argument("--pad", type=int, default=20)
 	ap.add_argument("--bg", default="#0B1014")
+	ap.add_argument("--base", default="", help="未着色文字色(空=テーマ既定/フォールバック)")
+	ap.add_argument("--alpha", action="store_true", help="透明背景RGBA(文字のみ)。背景はAE側のシェイプに任せる")
+	ap.add_argument("--loop", action="store_true", help="縦シームレスループ用: 縦paddingを0にし高さ=行高×行数(Offsetラップで継ぎ目なし)")
 	args = ap.parse_args()
 
 	d = json.load(open(args.infile, encoding="utf-8"))
 	text = d["text"]
-	base = "#C8E0E5"
-	for s in d["spans"]:
-		if s["kind"] == "text": base = s["color"]; break
+	base = args.base or "#C8E0E5"
+	if not args.base:
+		for s in d["spans"]:
+			if s["kind"] == "text": base = s["color"]; break
 
 	try:
 		font = ImageFont.truetype(args.font, args.size)
@@ -44,14 +48,18 @@ def main():
 
 	lines = text.split("\n")
 	maxcols = max((len(l) for l in lines), default=1)
+	vpad = 0 if args.loop else args.pad   # ループ時は縦pad=0で高さ=行高×行数(シームレス)
 	W = int(cw * maxcols) + args.pad * 2
-	H = lh * len(lines) + args.pad * 2
+	H = lh * len(lines) + vpad * 2
 
-	img = Image.new("RGB", (W, H), args.bg)
+	if args.alpha:
+		img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+	else:
+		img = Image.new("RGB", (W, H), args.bg)
 	dr = ImageDraw.Draw(img)
 
 	gpos = 0
-	y = args.pad
+	y = vpad
 	for line in lines:
 		x = args.pad
 		col = 0

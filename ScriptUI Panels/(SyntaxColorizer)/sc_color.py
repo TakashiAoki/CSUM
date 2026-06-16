@@ -40,6 +40,39 @@ LEVEL_KIND = {
 	"ALERT": "level.alert", "TRACE": "level.trace", "ERROR": "level.alert",
 }
 
+# --- 汎用FUIモード ---------------------------------------------------------
+# ログ形式(" | "区切り)に該当しない行を文字種で塗り分ける。IFTG Pro等が吐く
+# 装飾テキスト(LOCK / Spec:: / 48.8 / [52.8+] / >> 等)を多色化する。
+# 並び順が優先度: label → unit → tag → number → op (左から最初に当たったもの)
+FUI_RE = re.compile(r"""
+	  (?P<rule>[-=_]{2,}|//|\|)                                                       # ---- ==== ____ // |  罫線/境界 → dim
+	| (?P<hexid>0x[0-9A-Za-z]+)                                                       # 0x7P39  16進ID → 青
+	| (?P<label>[A-Za-z][A-Za-z0-9._/]*:{1,2}(?!\S))                                  # Spec::  DATA:  LOG.ID::  ラベル → 水色
+	| (?P<unit>(?:MHZ|MHz|Mhz|GHz|kHz|Hz|CM|cm|mm|km|kg|ms|ML|MI|MK|MC|MB|KB)(?![A-Za-z]))  # 多文字単位 → 緑
+	| (?P<number>[+\-]?\d+(?:\.\d+)?[%+]?)                                            # 48.8 -37.12 57.65% 68.5+  数値 → 金
+	| (?P<unit1>(?<=\d)[MKWVNSEW](?![A-Za-z]))                                        # 数字直後の M/K/W/V と方位 N/S/E/W → 緑
+	| (?P<tag>[A-Z][A-Z0-9_]*(?:-[A-Z_]+|[./][A-Z0-9_]+)*)                            # LOCK NODE_HASH NET.PORT/RAM TX-STATE 識別子 → 紫
+	| (?P<arrow>>>)                                                                   # >>  フロー → ピンク
+	| (?P<bracket>[\[\]])                                                             # [ ]  構造 → 青
+	| (?P<sign>[+\-])                                                                 # 余りの単独 +/- (境界・区切り) → dim
+""", re.VERBOSE)
+FUI_KIND = {
+	"rule": "code.comment", "hexid": "code.name", "label": "module",
+	"unit": "code.string", "number": "code.number", "unit1": "code.string",
+	"tag": "code.keyword", "arrow": "level.alert", "bracket": "code.name",
+	"sign": "code.comment",
+}
+
+def tokenize_fui(s, base):
+	"""フォーマット外の行を文字種で彩色。base=グローバル開始オフセット。
+	マッチした語だけスパン化し、隙間(空白等)はBASE色のまま残す。"""
+	spans = []
+	for m in FUI_RE.finditer(s):
+		kind = FUI_KIND[m.lastgroup]
+		st = base + m.start()
+		spans.append({"kind": kind, "value": m.group(), "start": st, "end": st + len(m.group())})
+	return spans
+
 _lexer = JavascriptLexer()
 
 def tokenize_code(s, base):
@@ -92,9 +125,14 @@ def colorize(text, theme):
 			spans.extend(tokenize_code(rest_s, cur))
 			cur += len(rest_s)
 		else:
-			# フォーマット外(空行など)はそのままtext
+			# フォーマット外(FUI装飾テキスト等)は文字種で彩色。
+			# 1語もマッチしなければ従来どおり全文textで残す(プレーン文の挙動を保持)。
 			if line:
-				spans.append({"kind": "text", "value": line, "start": gpos, "end": gpos + len(line)})
+				ftoks = tokenize_fui(line, gpos)
+				if ftoks:
+					spans.extend(ftoks)
+				else:
+					spans.append({"kind": "text", "value": line, "start": gpos, "end": gpos + len(line)})
 
 		# 改行ぶんを進める(末尾行以外)
 		gpos += len(line) + 1
