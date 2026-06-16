@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'Neon' imported from prefs",
+ "colors": {
+  "background": "#212121",
+  "text": "#0ABCBD",
+  "time": "#094C4C",
+  "delim": "#0F8687",
+  "module": "#FFF900",
+  "level.info": "#FFF900",
+  "level.debug": "#094C4C",
+  "level.warn": "#D08132",
+  "level.alert": "#BD0A4B",
+  "level.trace": "#094C4C",
+  "code.keyword": "#D08132",
+  "code.string": "#0DFEFF",
+  "code.number": "#FF00FF",
+  "code.comment": "#094C4C",
+  "code.operator": "#BB16C2",
+  "code.name": "#FFF900",
+  "meta": "#BB16C2"
+ }
+}

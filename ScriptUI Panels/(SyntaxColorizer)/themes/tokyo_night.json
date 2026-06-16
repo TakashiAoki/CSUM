@@ -1,0 +1,22 @@
+{
+ "_comment": "macOS Terminal 'Tokyo Night' profile (ANSI→SyntaxColorizer)",
+ "colors": {
+  "background": "#24283B",
+  "text": "#8A91B7",
+  "time": "#414868",
+  "delim": "#414868",
+  "module": "#7DCFFF",
+  "level.info": "#7AA2F7",
+  "level.debug": "#414868",
+  "level.warn": "#E0AF68",
+  "level.alert": "#F7768E",
+  "level.trace": "#414868",
+  "code.keyword": "#BB9AF7",
+  "code.string": "#9ECE6A",
+  "code.number": "#E0AF68",
+  "code.comment": "#414868",
+  "code.operator": "#7DCFFF",
+  "code.name": "#7AA2F7",
+  "meta": "#414868"
+ }
+}

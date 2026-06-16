@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'Low Light' imported from prefs",
+ "colors": {
+  "background": "#1E1E1E",
+  "text": "#A7A7A7",
+  "time": "#595459",
+  "delim": "#464B50",
+  "module": "#DBD28B",
+  "level.info": "#DBD28B",
+  "level.debug": "#595459",
+  "level.warn": "#9AAB6F",
+  "level.alert": "#CD6A50",
+  "level.trace": "#595459",
+  "code.keyword": "#9AAB6F",
+  "code.string": "#B2C6DB",
+  "code.number": "#B69663",
+  "code.comment": "#595459",
+  "code.operator": "#8C8C8C",
+  "code.name": "#DBD28B",
+  "meta": "#8C8C8C"
+ }
+}

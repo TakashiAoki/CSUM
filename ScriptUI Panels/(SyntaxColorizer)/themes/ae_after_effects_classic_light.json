@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'After Effects Classic Light' imported from prefs",
+ "colors": {
+  "background": "#F2F2F2",
+  "text": "#004D77",
+  "time": "#2D781C",
+  "delim": "#B8C8C8",
+  "module": "#4F2184",
+  "level.info": "#4F2184",
+  "level.debug": "#2D781C",
+  "level.warn": "#1B2370",
+  "level.alert": "#E60000",
+  "level.trace": "#2D781C",
+  "code.keyword": "#1B2370",
+  "code.string": "#A8413D",
+  "code.number": "#0A85FF",
+  "code.comment": "#2D781C",
+  "code.operator": "#141414",
+  "code.name": "#4F2184",
+  "meta": "#141414"
+ }
+}

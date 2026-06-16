@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'Hauf Light' imported from prefs",
+ "colors": {
+  "background": "#FCFDFE",
+  "text": "#515253",
+  "time": "#6E7070",
+  "delim": "#B8B9BA",
+  "module": "#776FB0",
+  "level.info": "#776FB0",
+  "level.debug": "#6E7070",
+  "level.warn": "#38A358",
+  "level.alert": "#E34C49",
+  "level.trace": "#6E7070",
+  "code.keyword": "#38A358",
+  "code.string": "#479BD4",
+  "code.number": "#E45C28",
+  "code.comment": "#6E7070",
+  "code.operator": "#727475",
+  "code.name": "#776FB0",
+  "meta": "#727475"
+ }
+}

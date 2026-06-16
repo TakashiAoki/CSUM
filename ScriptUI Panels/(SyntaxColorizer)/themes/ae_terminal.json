@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'Terminal' imported from prefs",
+ "colors": {
+  "background": "#000000",
+  "text": "#46CC29",
+  "time": "#2C801A",
+  "delim": "#46CC29",
+  "module": "#00FF17",
+  "level.info": "#00FF17",
+  "level.debug": "#2C801A",
+  "level.warn": "#1B9900",
+  "level.alert": "#FF0404",
+  "level.trace": "#2C801A",
+  "code.keyword": "#1B9900",
+  "code.string": "#00FF17",
+  "code.number": "#2AD039",
+  "code.comment": "#2C801A",
+  "code.operator": "#00FF17",
+  "code.name": "#00FF17",
+  "meta": "#00FF17"
+ }
+}

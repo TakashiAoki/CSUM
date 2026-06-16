@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'Cloak-O-Nut' imported from prefs",
+ "colors": {
+  "background": "#374654",
+  "text": "#B7A5A1",
+  "time": "#7C90AA",
+  "delim": "#606060",
+  "module": "#D3ADFA",
+  "level.info": "#D3ADFA",
+  "level.debug": "#7C90AA",
+  "level.warn": "#6AAFE1",
+  "level.alert": "#E16355",
+  "level.trace": "#7C90AA",
+  "code.keyword": "#6AAFE1",
+  "code.string": "#F4F3F5",
+  "code.number": "#B8CEDF",
+  "code.comment": "#7C90AA",
+  "code.operator": "#E7BD58",
+  "code.name": "#D3ADFA",
+  "meta": "#E7BD58"
+ }
+}

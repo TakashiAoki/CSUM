@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'Classic' imported from prefs",
+ "colors": {
+  "background": "#F9F9F9",
+  "text": "#3A3A3A",
+  "time": "#AAAAAA",
+  "delim": "#919191",
+  "module": "#614096",
+  "level.info": "#614096",
+  "level.debug": "#AAAAAA",
+  "level.warn": "#0877BD",
+  "level.alert": "#E96D3B",
+  "level.trace": "#AAAAAA",
+  "code.keyword": "#0877BD",
+  "code.string": "#0008FF",
+  "code.number": "#B300B3",
+  "code.comment": "#AAAAAA",
+  "code.operator": "#3A312D",
+  "code.name": "#614096",
+  "meta": "#3A312D"
+ }
+}

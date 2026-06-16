@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'Basic Light' imported from prefs",
+ "colors": {
+  "background": "#FFFEFD",
+  "text": "#333333",
+  "time": "#A5A5A5",
+  "delim": "#232323",
+  "module": "#8B1A83",
+  "level.info": "#8B1A83",
+  "level.debug": "#A5A5A5",
+  "level.warn": "#0B8DC6",
+  "level.alert": "#7B5116",
+  "level.trace": "#A5A5A5",
+  "code.keyword": "#0B8DC6",
+  "code.string": "#1C2AA8",
+  "code.number": "#02B15B",
+  "code.comment": "#A5A5A5",
+  "code.operator": "#1A1E23",
+  "code.name": "#8B1A83",
+  "meta": "#1A1E23"
+ }
+}

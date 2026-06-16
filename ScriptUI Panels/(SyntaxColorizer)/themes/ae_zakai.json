@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'Zakai' imported from prefs",
+ "colors": {
+  "background": "#2A2A2A",
+  "text": "#83CFD7",
+  "time": "#6F705F",
+  "delim": "#848484",
+  "module": "#FEFEFE",
+  "level.info": "#FEFEFE",
+  "level.debug": "#6F705F",
+  "level.warn": "#EC7BA4",
+  "level.alert": "#EC3F59",
+  "level.trace": "#6F705F",
+  "code.keyword": "#EC7BA4",
+  "code.string": "#E2CC71",
+  "code.number": "#9E78EE",
+  "code.comment": "#6F705F",
+  "code.operator": "#BEBEC5",
+  "code.name": "#FEFEFE",
+  "meta": "#BEBEC5"
+ }
+}

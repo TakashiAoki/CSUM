@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'Labels' imported from prefs",
+ "colors": {
+  "background": "#262626",
+  "text": "#B3C7B3",
+  "time": "#4AA44C",
+  "delim": "#E4D84C",
+  "module": "#A9A9CA",
+  "level.info": "#A9A9CA",
+  "level.debug": "#4AA44C",
+  "level.warn": "#3DA2A5",
+  "level.alert": "#B53838",
+  "level.trace": "#4AA44C",
+  "code.keyword": "#3DA2A5",
+  "code.string": "#F46DD6",
+  "code.number": "#677DE0",
+  "code.comment": "#4AA44C",
+  "code.operator": "#E4D84C",
+  "code.name": "#A9A9CA",
+  "meta": "#E4D84C"
+ }
+}

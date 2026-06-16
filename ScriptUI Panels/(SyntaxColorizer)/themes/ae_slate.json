@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'Slate' imported from prefs",
+ "colors": {
+  "background": "#ECF4EE",
+  "text": "#4C5951",
+  "time": "#7C8980",
+  "delim": "#87928A",
+  "module": "#9C5636",
+  "level.info": "#9C5636",
+  "level.debug": "#7C8980",
+  "level.warn": "#4B9865",
+  "level.alert": "#D95A4C",
+  "level.trace": "#7C8980",
+  "code.keyword": "#4B9865",
+  "code.string": "#208085",
+  "code.number": "#855622",
+  "code.comment": "#7C8980",
+  "code.operator": "#4C5951",
+  "code.name": "#9C5636",
+  "meta": "#4C5951"
+ }
+}

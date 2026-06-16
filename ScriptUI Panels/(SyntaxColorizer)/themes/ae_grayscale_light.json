@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'Grayscale Light' imported from prefs",
+ "colors": {
+  "background": "#F2F2F2",
+  "text": "#333333",
+  "time": "#999999",
+  "delim": "#999999",
+  "module": "#0D0D0D",
+  "level.info": "#0D0D0D",
+  "level.debug": "#999999",
+  "level.warn": "#666666",
+  "level.alert": "#E34C49",
+  "level.trace": "#999999",
+  "code.keyword": "#666666",
+  "code.string": "#262626",
+  "code.number": "#0D0D0D",
+  "code.comment": "#999999",
+  "code.operator": "#0D0D0D",
+  "code.name": "#0D0D0D",
+  "meta": "#0D0D0D"
+ }
+}

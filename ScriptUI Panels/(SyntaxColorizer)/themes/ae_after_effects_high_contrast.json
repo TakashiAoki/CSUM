@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'After Effects High Contrast' imported from prefs",
+ "colors": {
+  "background": "#1D1D1D",
+  "text": "#B1B1B1",
+  "time": "#FFE8BA",
+  "delim": "#4D4C4D",
+  "module": "#2FFF3F",
+  "level.info": "#2FFF3F",
+  "level.debug": "#FFE8BA",
+  "level.warn": "#78E5FF",
+  "level.alert": "#F3C42C",
+  "level.trace": "#FFE8BA",
+  "code.keyword": "#78E5FF",
+  "code.string": "#FF9496",
+  "code.number": "#57ABFF",
+  "code.comment": "#FFE8BA",
+  "code.operator": "#AD99AD",
+  "code.name": "#2FFF3F",
+  "meta": "#AD99AD"
+ }
+}

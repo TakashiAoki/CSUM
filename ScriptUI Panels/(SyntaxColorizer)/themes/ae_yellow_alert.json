@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'Yellow Alert' imported from prefs",
+ "colors": {
+  "background": "#030200",
+  "text": "#F0DD5F",
+  "time": "#4C471E",
+  "delim": "#F0DD5F",
+  "module": "#F0D100",
+  "level.info": "#F0D100",
+  "level.debug": "#4C471E",
+  "level.warn": "#F0D100",
+  "level.alert": "#F0745F",
+  "level.trace": "#4C471E",
+  "code.keyword": "#F0D100",
+  "code.string": "#F0D100",
+  "code.number": "#F0D100",
+  "code.comment": "#4C471E",
+  "code.operator": "#F0D100",
+  "code.name": "#F0D100",
+  "meta": "#F0D100"
+ }
+}

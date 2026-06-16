@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'After Effects Pastel' imported from prefs",
+ "colors": {
+  "background": "#262626",
+  "text": "#93A1A1",
+  "time": "#D87306",
+  "delim": "#586E75",
+  "module": "#E47AE4",
+  "level.info": "#E47AE4",
+  "level.debug": "#D87306",
+  "level.warn": "#2AA198",
+  "level.alert": "#F3C42C",
+  "level.trace": "#D87306",
+  "code.keyword": "#2AA198",
+  "code.string": "#FC363B",
+  "code.number": "#348EE8",
+  "code.comment": "#D87306",
+  "code.operator": "#8A8A8A",
+  "code.name": "#E47AE4",
+  "meta": "#8A8A8A"
+ }
+}

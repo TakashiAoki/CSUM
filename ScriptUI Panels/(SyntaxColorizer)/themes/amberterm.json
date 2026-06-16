@@ -1,0 +1,22 @@
+{
+ "_comment": "暖色CRTターミナル(ボーグマン寄り)",
+ "colors": {
+  "background": "#0E0A04",
+  "text": "#E8D8B0",
+  "time": "#7A6A40",
+  "delim": "#4A3E22",
+  "module": "#FFC050",
+  "level.info": "#FFD060",
+  "level.debug": "#9A8850",
+  "level.warn": "#FF9020",
+  "level.alert": "#FF5030",
+  "level.trace": "#6A5C38",
+  "code.keyword": "#FF9020",
+  "code.string": "#C8E060",
+  "code.number": "#FF7030",
+  "code.comment": "#6A5C38",
+  "code.operator": "#D8C088",
+  "code.name": "#F0E0B8",
+  "meta": "#B8A878"
+ }
+}

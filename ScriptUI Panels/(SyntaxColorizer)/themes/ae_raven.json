@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'Raven' imported from prefs",
+ "colors": {
+  "background": "#202020",
+  "text": "#DBDBDB",
+  "time": "#919191",
+  "delim": "#919191",
+  "module": "#FFFFFF",
+  "level.info": "#FFFFFF",
+  "level.debug": "#919191",
+  "level.warn": "#A4EBA9",
+  "level.alert": "#FC8889",
+  "level.trace": "#919191",
+  "code.keyword": "#A4EBA9",
+  "code.string": "#FFDC79",
+  "code.number": "#FC8889",
+  "code.comment": "#919191",
+  "code.operator": "#A4EBA9",
+  "code.name": "#FFFFFF",
+  "meta": "#A4EBA9"
+ }
+}

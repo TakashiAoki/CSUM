@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'After Effects Green Cache' imported from prefs",
+ "colors": {
+  "background": "#1D1D1D",
+  "text": "#B1B1B1",
+  "time": "#EAC885",
+  "delim": "#4D4C4D",
+  "module": "#22BA2E",
+  "level.info": "#22BA2E",
+  "level.debug": "#EAC885",
+  "level.warn": "#64BFD5",
+  "level.alert": "#F3C42C",
+  "level.trace": "#EAC885",
+  "code.keyword": "#64BFD5",
+  "code.string": "#F67476",
+  "code.number": "#348EE8",
+  "code.comment": "#EAC885",
+  "code.operator": "#4D4C4D",
+  "code.name": "#22BA2E",
+  "meta": "#4D4C4D"
+ }
+}

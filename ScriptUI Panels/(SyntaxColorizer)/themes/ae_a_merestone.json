@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'A Merestone' imported from prefs",
+ "colors": {
+  "background": "#362C22",
+  "text": "#DCC7C2",
+  "time": "#7B6D59",
+  "delim": "#634A31",
+  "module": "#EBB687",
+  "level.info": "#EBB687",
+  "level.debug": "#7B6D59",
+  "level.warn": "#AA9F47",
+  "level.alert": "#D3AD44",
+  "level.trace": "#7B6D59",
+  "code.keyword": "#AA9F47",
+  "code.string": "#59B28F",
+  "code.number": "#BD806A",
+  "code.comment": "#7B6D59",
+  "code.operator": "#B2A5A1",
+  "code.name": "#EBB687",
+  "meta": "#B2A5A1"
+ }
+}

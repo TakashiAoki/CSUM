@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'Playground' imported from prefs",
+ "colors": {
+  "background": "#2D212C",
+  "text": "#D24041",
+  "time": "#5C636A",
+  "delim": "#969093",
+  "module": "#1B8BA7",
+  "level.info": "#1B8BA7",
+  "level.debug": "#5C636A",
+  "level.warn": "#F1BD51",
+  "level.alert": "#D24041",
+  "level.trace": "#5C636A",
+  "code.keyword": "#F1BD51",
+  "code.string": "#87B43A",
+  "code.number": "#EF7C27",
+  "code.comment": "#5C636A",
+  "code.operator": "#969093",
+  "code.name": "#1B8BA7",
+  "meta": "#969093"
+ }
+}

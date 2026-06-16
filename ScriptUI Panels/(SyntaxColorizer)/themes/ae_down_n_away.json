@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'Down N' Away' imported from prefs",
+ "colors": {
+  "background": "#212327",
+  "text": "#E6E6E0",
+  "time": "#818587",
+  "delim": "#919191",
+  "module": "#E6DB74",
+  "level.info": "#E6DB74",
+  "level.debug": "#818587",
+  "level.warn": "#EF5252",
+  "level.alert": "#E72334",
+  "level.trace": "#818587",
+  "code.keyword": "#EF5252",
+  "code.string": "#75D640",
+  "code.number": "#4BD5F0",
+  "code.comment": "#818587",
+  "code.operator": "#E6E6E0",
+  "code.name": "#E6DB74",
+  "meta": "#E6E6E0"
+ }
+}

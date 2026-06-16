@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'Hauf Dark' imported from prefs",
+ "colors": {
+  "background": "#0C0D0E",
+  "text": "#B7B8B9",
+  "time": "#6E7070",
+  "delim": "#4C4E4E",
+  "module": "#7069A8",
+  "level.info": "#7069A8",
+  "level.debug": "#6E7070",
+  "level.warn": "#37A257",
+  "level.alert": "#E01E26",
+  "level.trace": "#6E7070",
+  "code.keyword": "#37A257",
+  "code.string": "#80ADCD",
+  "code.number": "#D65220",
+  "code.comment": "#6E7070",
+  "code.operator": "#9C9D9E",
+  "code.name": "#7069A8",
+  "meta": "#9C9D9E"
+ }
+}

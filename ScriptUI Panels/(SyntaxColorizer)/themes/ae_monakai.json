@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'Monakai' imported from prefs",
+ "colors": {
+  "background": "#212121",
+  "text": "#F8F8F2",
+  "time": "#837E69",
+  "delim": "#919191",
+  "module": "#A6E22E",
+  "level.info": "#A6E22E",
+  "level.debug": "#837E69",
+  "level.warn": "#66D9EF",
+  "level.alert": "#F92672",
+  "level.trace": "#837E69",
+  "code.keyword": "#66D9EF",
+  "code.string": "#E6DB74",
+  "code.number": "#AE81FF",
+  "code.comment": "#837E69",
+  "code.operator": "#F8F8F2",
+  "code.name": "#A6E22E",
+  "meta": "#F8F8F2"
+ }
+}

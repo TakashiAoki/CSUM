@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'Solarized Light' imported from prefs",
+ "colors": {
+  "background": "#FAF8F5",
+  "text": "#323232",
+  "time": "#919191",
+  "delim": "#919191",
+  "module": "#0000D7",
+  "level.info": "#0000D7",
+  "level.debug": "#919191",
+  "level.warn": "#008080",
+  "level.alert": "#FF6162",
+  "level.trace": "#919191",
+  "code.keyword": "#008080",
+  "code.string": "#9B0000",
+  "code.number": "#B300B3",
+  "code.comment": "#919191",
+  "code.operator": "#494A00",
+  "code.name": "#0000D7",
+  "meta": "#494A00"
+ }
+}

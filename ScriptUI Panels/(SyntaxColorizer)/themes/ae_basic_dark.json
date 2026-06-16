@@ -1,0 +1,22 @@
+{
+ "_comment": "AE expression theme 'Basic Dark' imported from prefs",
+ "colors": {
+  "background": "#1F1F1F",
+  "text": "#BEE3ED",
+  "time": "#697570",
+  "delim": "#738787",
+  "module": "#8E65D6",
+  "level.info": "#8E65D6",
+  "level.debug": "#697570",
+  "level.warn": "#15B8CF",
+  "level.alert": "#DC322F",
+  "level.trace": "#697570",
+  "code.keyword": "#15B8CF",
+  "code.string": "#E8AC56",
+  "code.number": "#4CAF50",
+  "code.comment": "#697570",
+  "code.operator": "#15B8CF",
+  "code.name": "#8E65D6",
+  "meta": "#15B8CF"
+ }
+}
