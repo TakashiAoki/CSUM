@@ -27,8 +27,15 @@ Scripts/
 │   ├── (Resource)/       RS/OMテンプレート(.ars/.aom)・アイコン・補助ツール
 │   └── toFileMenu/       ファイルメニュー常駐系(CSUM_GotoTime)
 ├── Startup/CSUMCC_Startup.jsx     AE起動時の初期化(設定ロード)
-└── Shutdown/CSUMCC_Shutdown.jsx   AE終了時の後始末
+├── Shutdown/CSUMCC_Shutdown.jsx   AE終了時の後始末
+└── ScriptUI Panels/
+    └── SyntaxColorizer.jsx        テキストレイヤーを構文彩色するドッキングパネル(要 Python + Pygments)
 ```
+
+### SyntaxColorizer
+
+テキストレイヤーを **構文彩色(シンタックスハイライト)** するドッキング可能な ScriptUI パネル。ログ・コード・FUI テキストを、AE のエクスプレッションエディタや macOS ターミナルと同じ配色で一発彩色できます(解析は Python/Pygments、描画は AE)。
+A dockable ScriptUI panel that syntax-highlights a text layer — colorize log / code / FUI text with the same palettes as the AE expression editor or your Terminal. 詳細 / details → [`ScriptUI Panels/(SyntaxColorizer)/README.md`](ScriptUI%20Panels/(SyntaxColorizer)/README.md)
 
 ## インストール / Install
 
@@ -39,6 +46,7 @@ Scripts/
 2. AE の環境設定で **「スクリプトによるファイルへの書き込みとネットワークアクセスを許可」を ON** にする(必須。起動時の設定ロードに使用します)
 3. レンダー・書き出し系を使う場合は `CSUMCC/(Resource)/` の `.ars` / `.aom` をレンダーキュー設定・出力モジュールテンプレートとして読み込む
 4. AE を再起動 → 「ファイル」→「スクリプト」から各スクリプトを実行
+5. **SyntaxColorizer**(任意): `ScriptUI Panels/` の `SyntaxColorizer.jsx` と `(SyntaxColorizer)/` を AE の `Scripts/ScriptUI Panels/` へコピー → 「ウインドウ」メニューからドッキング。別途 `pip install pygments`(PNG モードは `pillow` も)が必要です
 
 ## 動作要件 / Requirements
 
