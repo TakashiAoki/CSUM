@@ -48,10 +48,11 @@ FUI_RE = re.compile(r"""
 	  (?P<rule>[-=_]{2,}|//|\|)                                                       # ---- ==== ____ // |  罫線/境界 → dim
 	| (?P<hexid>0x[0-9A-Za-z]+)                                                       # 0x7P39  16進ID → 青
 	| (?P<label>[A-Za-z][A-Za-z0-9._/]*:{1,2}(?!\S))                                  # Spec::  DATA:  LOG.ID::  ラベル → 水色
-	| (?P<unit>(?:MHZ|MHz|Mhz|GHz|kHz|Hz|CM|cm|mm|km|kg|ms|ML|MI|MK|MC|MB|KB)(?![A-Za-z]))  # 多文字単位 → 緑
+	| (?P<unit>(?<![A-Za-z])(?:MHZ|MHz|Mhz|GHz|kHz|Hz|CM|cm|mm|km|kg|ms|ML|MI|MK|MC|MB|KB)(?![A-Za-z]))  # 多文字単位 → 緑 (左右に英字が無い時のみ=systemsのms誤爆防止)
 	| (?P<number>[+\-]?\d+(?:\.\d+)?[%+]?)                                            # 48.8 -37.12 57.65% 68.5+  数値 → 金
 	| (?P<unit1>(?<=\d)[MKWVNSEW](?![A-Za-z]))                                        # 数字直後の M/K/W/V と方位 N/S/E/W → 緑
-	| (?P<tag>[A-Z][A-Z0-9_]*(?:-[A-Z_]+|[./][A-Z0-9_]+)*)                            # LOCK NODE_HASH NET.PORT/RAM TX-STATE 識別子 → 紫
+	| (?P<enumdim>(?<=/)[A-Z][A-Z0-9]+|[A-Z][A-Z0-9]+(?=/))                           # A/[B]/C の囲み外選択肢(スラッシュ隣接) → dim(一段暗く)
+	| (?P<tag>[A-Z][A-Z0-9_]+(?:-[A-Z0-9_]+|[./][A-Z0-9_]+)*)                         # 2字以上の全大文字識別子 → 紫 (Fir/Bolg等の大文字始まり固有名詞は除外)
 	| (?P<arrow>>>)                                                                   # >>  フロー → ピンク
 	| (?P<bracket>[\[\]])                                                             # [ ]  構造 → 青
 	| (?P<sign>[+\-])                                                                 # 余りの単独 +/- (境界・区切り) → dim
@@ -60,7 +61,7 @@ FUI_KIND = {
 	"rule": "code.comment", "hexid": "code.name", "label": "module",
 	"unit": "code.string", "number": "code.number", "unit1": "code.string",
 	"tag": "code.keyword", "arrow": "level.alert", "bracket": "code.name",
-	"sign": "code.comment",
+	"sign": "code.comment", "enumdim": "code.comment",
 }
 
 def tokenize_fui(s, base):
@@ -90,6 +91,9 @@ def tokenize_code(s, base):
 def colorize(text, theme):
 	colors = theme.get("colors", {})
 	def col(kind):
+		if kind == "section":
+			# section見出し(// LABEL)は専用色。テーマに無ければ module 色で代用(comment/keyword混色を避ける)
+			return colors.get("section") or colors.get("module") or colors.get("text", "#FFFFFF")
 		return colors.get(kind, colors.get("text", "#FFFFFF"))
 
 	spans = []
@@ -128,11 +132,15 @@ def colorize(text, theme):
 			# フォーマット外(FUI装飾テキスト等)は文字種で彩色。
 			# 1語もマッチしなければ従来どおり全文textで残す(プレーン文の挙動を保持)。
 			if line:
-				ftoks = tokenize_fui(line, gpos)
-				if ftoks:
-					spans.extend(ftoks)
+				if line.lstrip().startswith("//"):
+					# セクション見出し行(// DRAGOON UNITS 等)は行ごと section 色
+					spans.append({"kind": "section", "value": line, "start": gpos, "end": gpos + len(line)})
 				else:
-					spans.append({"kind": "text", "value": line, "start": gpos, "end": gpos + len(line)})
+					ftoks = tokenize_fui(line, gpos)
+					if ftoks:
+						spans.extend(ftoks)
+					else:
+						spans.append({"kind": "text", "value": line, "start": gpos, "end": gpos + len(line)})
 
 		# 改行ぶんを進める(末尾行以外)
 		gpos += len(line) + 1
