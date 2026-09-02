@@ -4,3 +4,4 @@ __pycache__/
 
 # 作品固有ノウハウ入りスクリプト（Private repo のみで管理・公開版除外）
 ykz_*.jsx
+ScriptUI Panels/(SyntaxColorizer)/themes/tokucc.json
