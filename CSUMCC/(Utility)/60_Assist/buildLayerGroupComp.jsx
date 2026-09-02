@@ -1,7 +1,8 @@
-// buildLayerGroupComp Ver1.1
+// buildLayerGroupComp Ver1.2
 // Copyright (c) 2007-2023 Over Ray Studio・Takashi Aoki @voyager_vision. All rights reserved.
-// LastUpDate 2023/07/21
+// LastUpDate 2026/09/02
 // 選択レイヤーをプリコンポーズして、プリコンポサイズを選択レイヤーサイズにリサイズ、プリコンポを元の位置にオフセットします
+// Ver1.2 : 回転・スケールを掛けたレイヤーの外接矩形を正しく算出するよう修正（縦組みテキスト等）
 
 var curScriptName = "buildLayerGroupComp";
 var defMarginValue = 100;
@@ -115,16 +116,37 @@ app.endUndoGroup();
 			var layerBounds = layer.sourceRectAtTime(0, false);
 			var layerPos = layer.transform.position.value;
 			var layerAnchor = layer.transform.anchorPoint.value;
+			var layerScale = layer.transform.scale.value;
 
-			var left = layerPos[0] - layerAnchor[0] + layerBounds.left;
-			var top = layerPos[1] - layerAnchor[1] + layerBounds.top;
-			var right = left + layerBounds.width;
-			var bottom = top + layerBounds.height;
+			// 🛑 sourceRectAtTime は「回転前・スケール前」の矩形を返す。
+			//    そのまま width/height を足すと、90度回転した縦組みテキスト等で
+			//    外接矩形が過大になる(実害: 縦タブが幅80→134と算出された 2026-09-02)
+			//    → 4隅にスケールと回転を掛けてから min/max を取る
+			var layerRot = 0;
+			try { layerRot = layer.transform.rotation.value; }
+			catch (e) { try { layerRot = layer.transform.zRotation.value; } catch (e2) { layerRot = 0; } }
 
-			minX = Math.min(minX, left);
-			minY = Math.min(minY, top);
-			maxX = Math.max(maxX, right);
-			maxY = Math.max(maxY, bottom);
+			var rad = layerRot * Math.PI / 180;
+			var cosR = Math.cos(rad);
+			var sinR = Math.sin(rad);
+			var cornerXList = [layerBounds.left, layerBounds.left + layerBounds.width];
+			var cornerYList = [layerBounds.top, layerBounds.top + layerBounds.height];
+
+			for (var cx = 0; cx < 2; cx++)
+			{
+				for (var cy = 0; cy < 2; cy++)
+				{
+					var localX = (cornerXList[cx] - layerAnchor[0]) * layerScale[0] / 100;
+					var localY = (cornerYList[cy] - layerAnchor[1]) * layerScale[1] / 100;
+					var compX = localX * cosR - localY * sinR + layerPos[0];
+					var compY = localX * sinR + localY * cosR + layerPos[1];
+
+					minX = Math.min(minX, compX);
+					minY = Math.min(minY, compY);
+					maxX = Math.max(maxX, compX);
+					maxY = Math.max(maxY, compY);
+				}
+			}
 		};
 
 		totalWidth = Math.ceil(maxX - minX);
