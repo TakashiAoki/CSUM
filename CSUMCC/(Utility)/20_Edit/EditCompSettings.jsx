@@ -1,10 +1,10 @@
 ﻿// ============================================
 // Script Name : EditCompSettings
-// Version     : v5.1
+// Version     : v5.2
 // 仕様        : 複数のコンポジション設定（サイズ・尺）を同時に変換します
 // Copyright   : Over Ray Studio
 // Author      : Takashi Aoki
-// LastUpdate  : 2026-05-30
+// LastUpdate  : 2026-09-02
 // ============================================
 
 var curScriptName = "EditCompSettings";
@@ -25,6 +25,8 @@ if ( !flag )
 	var compFrameRate = null;
 	var oneSheetDuration = 144;
 	var PFflag = null;
+	var AE_MAX_TIME = 10800;// AEの時間上限=3時間。これを超える outPoint / duration は代入時に例外になる
+	var skipLayerList = new Array();// 上限に達して伸ばしきれなかったレイヤーの記録
 	if ( typeof getItem === "undefined" ) { getItem = null; }
 }
 // **** Main Script ***************************************************************************************************************
@@ -400,7 +402,16 @@ if ( !flag )
 		//情報パネル表示
 		clearOutput();
 		writeLn( "EditCompSettings Info" );
-		writeLn( selectComp.length+"個のコンポ設定を変更しました。" );
+		writeLn( selectComp.length + " comps updated." );
+		if ( skipLayerList.length > 0 )
+		{
+			var msg = "Reached the AE time limit (3:00:00). These layers could not be extended:";
+			for ( var k = 0; k < skipLayerList.length; k++ ) { msg += "\n   " + skipLayerList[k]; }
+			msg += "\n\nTrim them to the comp duration, then run again.";
+			writeLn( "" );
+			writeLn( msg );
+			alert( msg );
+		}
 }
 // **** FUNCTION EditCompSettings() ***********************************************************************************************
 //		コンポサイズ変更
@@ -528,30 +539,35 @@ if ( !flag )
 }
 // **** FUNCTION EditCompSettings() ChangeCompDuration()********************************************************************
 //		レイヤーのアウトポイントをコンポ末尾に
+//		AE時間上限(3時間)を超える outPoint 代入は例外を投げ、以降のコンポ処理ごと中断してしまうため
+//		上限でクランプ＋try/catchで隔離し、対象は skipLayerList に記録して最後に報告する
 		function AdjustLayerOutPoint( curDuration , newDuration , curLayerList)
 {
 		for ( y = 1; y <= curLayerList.length; y++ )
 		{
-			if ( curLayerList[y].outPoint >= curDuration )
-			{
-				if ( curLayerList[y].locked == true )
-				{
-					curLayerList[y].locked = false;
-					if ( curLayerList[y].outPoint > curDuration )
-					{ curLayerList[y].outPoint = newDuration+curLayerList[y].outPoint-curDuration;}
-					if ( curLayerList[y].outPoint == curDuration )
-					{ curLayerList[y].outPoint = newDuration;}
-					curLayerList[y].locked = true;
-				}
-				else
-				{ 
-					if ( curLayerList[y].outPoint > curDuration )
-					{ curLayerList[y].outPoint = newDuration+curLayerList[y].outPoint-curDuration;}
-					if ( curLayerList[y].outPoint == curDuration )
-					{ curLayerList[y].outPoint = newDuration;}
-				}
-			}
+			var curLayer = curLayerList[y];
+			if ( curLayer.outPoint < curDuration ) continue;
+
+			var targetOut = ( curLayer.outPoint > curDuration ) ? newDuration+curLayer.outPoint-curDuration : newDuration;
+			var overLimit = ( targetOut > AE_MAX_TIME );
+			if ( overLimit ) { targetOut = AE_MAX_TIME; RecordSkipLayer( curLayer ); }// 上限クランプ
+			if ( targetOut == curLayer.outPoint ) continue;
+
+			var wasLocked = curLayer.locked;
+			if ( wasLocked ) curLayer.locked = false;
+			try { curLayer.outPoint = targetOut; } catch(e) { RecordSkipLayer( curLayer ); }
+			if ( wasLocked ) curLayer.locked = true;
 		}
+}
+// **** FUNCTION EditCompSettings() ChangeCompDuration()********************************************************************
+//		上限に達して伸ばしきれなかったレイヤーを記録（重複登録しない）
+		function RecordSkipLayer( curLayer )
+{
+		var curInfo = null;
+		try { curInfo = curLayer.containingComp.name + " / " + curLayer.name; } catch(e) { return; }
+		for ( var k = 0; k < skipLayerList.length; k++ )
+		{ if ( skipLayerList[k] == curInfo ) return; }
+		skipLayerList.push( curInfo );
 }
 // **** FUNCTION EditCompSettings() ChangeCompDuration()********************************************************************
 //		未選択の親コンポ内プリコンポレイヤーの outPoint を伸長
@@ -580,15 +596,17 @@ if ( !flag )
 					var layer = parentComp.layer(l);
 					if ( layer.source == changedComp && layer.outPoint >= oldDuration )
 					{
-						var wasLocked = layer.locked;
-						if ( wasLocked ) layer.locked = false;
-						if ( layer.outPoint == oldDuration )
-						{ layer.outPoint = newDuration; }
-						else
-						{ layer.outPoint = newDuration + layer.outPoint - oldDuration; }
-						if ( wasLocked ) layer.locked = true;
+						var targetOut = ( layer.outPoint > oldDuration ) ? newDuration+layer.outPoint-oldDuration : newDuration;
+						if ( targetOut > AE_MAX_TIME ) { targetOut = AE_MAX_TIME; RecordSkipLayer( layer ); }// 上限クランプ
+						if ( targetOut != layer.outPoint )
+						{
+							var wasLocked = layer.locked;
+							if ( wasLocked ) layer.locked = false;
+							layer.outPoint = targetOut;
+							if ( wasLocked ) layer.locked = true;
+						}
 					}
-				} catch(e) {}
+				} catch(e) { if ( layer != null ) RecordSkipLayer( layer ); }
 			}
 		}
 }
