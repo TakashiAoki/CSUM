@@ -1,12 +1,19 @@
-﻿// ExportExrSeq Ver.1.00
+﻿// ExportExrSeq Ver.1.01
 // Copyright (c) 2007-2019 Over Ray Studio・Takashi Aoki @voyager_vision. All rights reserved.
-// LastUpDate 2019/07/20
+// LastUpDate 2026/09/12
 // OpenEXRシーケンス書き出し
 // <<実行前提条件>>
 // aepファイルが [カット作業フォルダ] / AEP フォルダ以下に保存されている
 // レンダリング設定に"Multi-Machine Settings"、　出力モジュールに"OpenEXR"が用意されている <外部設定出来るようにしたい
 
 var curScriptName = "ExportExrSeq";
+
+// **** ERROR GUARD ***************************************************************************************************************
+//		ランチャー（CL_Extra / KBar 等）のボタンから起動すると、ScriptUIのイベントハンドラ内で起きた
+//		例外を After Effects は報告しない＝失敗しても「黙って終わった」ようにしか見えない
+//		（実測と経緯 = docs/INCIDENTS.md 2026-09-03／型の見本 = EditCompSettings.jsx v5.4）。
+//		実行ブロック全体をここで囲み、例外は必ず自前で alert に出す。
+try {
 
 var curRS = "Multi-Machine Settings";//レンダリング設定
 var curOM = "OpenEXR_32bit";//出力モジュールを設定
@@ -33,6 +40,8 @@ var curExt = ".exr";//ファイル拡張子
 		scriptExecute( myCSUMCCUtilityFolder.fsName + "/90_ExportRender/" + "CmdRender.jsx" );
 	}
 
+} catch ( err ) { reportScriptError( err ); }
+// **** ERROR GUARD END ***********************************************************************************************************
 // **** FUNCTION ******************************************************************************************************************
 //		プロジェクトの状態チェック
 		function ProjectCheck()
@@ -189,4 +198,21 @@ var curExt = ".exr";//ファイル拡張子
 		scriptFileName.open();
 		eval(scriptFileName.read());
 		scriptFileName.close();
+}
+
+// **** FUNCTION ******************************************************************************************************************
+//		捕まえた例外を必ず画面に出す（ランチャー経由でも消えないように）
+		function reportScriptError( err )
+{
+		try { app.endUndoGroup(); } catch ( e ) {}// 開いたままのundoグループを閉じる
+
+		var msg = ( err && err.message ) ? err.message : String( err );
+		if ( err && err.line ) { msg += "\n" + "line : " + err.line; }
+		if ( err && err.fileName ) { msg += "\n" + "file : " + File.decode( err.fileName ); }
+
+		alert( curScriptName + " stopped." + "\n" + "\n" + msg, curScriptName );
+
+		clearOutput();
+		writeLn( curScriptName + " : stopped by an error" );
+		writeLn( msg );
 }

@@ -1,13 +1,23 @@
 ﻿// ============================================
 // Script Name : EditCompSettings
-// Version     : v5.2
+// Version     : v5.4
 // 仕様        : 複数のコンポジション設定（サイズ・尺）を同時に変換します
 // Copyright   : Over Ray Studio
 // Author      : Takashi Aoki
-// LastUpdate  : 2026-09-02
+// LastUpdate  : 2026-09-03
 // ============================================
 
 var curScriptName = "EditCompSettings";
+
+// **** ERROR GUARD ***************************************************************************************************************
+//		ランチャー（CL_Extra / KBar 等）のボタンから起動した場合、ScriptUIのイベントハンドラ内で発生した
+//		例外を After Effects は報告しない。＝失敗しても「黙って終わった」ようにしか見えない
+//		（実測と経緯 = docs/INCIDENTS.md 2026-09-03）。
+//		そのため実行ブロック全体をここで囲み、例外は必ず自前で alert に出す。
+//		🔴 この型は CSUMCC 共通。他スクリプトへ横展開する際もこの形をコピーする
+//		🔴 reportScriptError は (Tools) に外出ししない。起動チェーンが走る前に落ちた場合でも
+//		   確実に動く必要があるため、各スクリプトに自己完結で持たせる
+try {
 
 var flag = null;
 ProjectCheck();
@@ -66,7 +76,9 @@ if ( !flag )
 			EditCompSettings();
 		}
 		app.endUndoGroup();
-		
+
+} catch ( err ) { reportScriptError( err ); }
+// **** ERROR GUARD END ***********************************************************************************************************
 // **** FUNCTION ******************************************************************************************************************
 //		WorkFormatキャッシュから特定項目を取得
 		function getWF ( index , category , item )
@@ -478,7 +490,25 @@ if ( !flag )
 		if ( compDuration != "[multi]" )
 		{
 			var n = selectComp.length;
-			
+
+			//事前チェック：AEの上限(3時間)を超える尺が1つでもあれば、何も変更せずに中止する
+			//ループ途中で例外になると「一部のコンポだけ尺が変わった」半端な状態になるため、
+			//先に全部を検査してから着手する（v5.4）
+			var overList = new Array();
+			for ( i = 0; i <= n-1; i++ )
+			{
+				var curMaxFrame = Math.floor( AE_MAX_TIME / selectComp[i].frameDuration + 0.000001 );
+				if ( compDuration > curMaxFrame )
+				{ overList.push( selectComp[i].name + "   ( max " + curMaxFrame + "f @ " + selectComp[i].frameRate + "fps )" ); }
+			}
+			if ( overList.length > 0 )
+			{
+				alert( "Duration exceeds the After Effects limit of 3 hours (10800 sec)." + "\n"
+					 + "Nothing was changed." + "\n\n"
+					 + overList.join( "\n" ) , curScriptName );
+				return;
+			}
+
 			if ( codeMatchComp == null || codeCollation != true )
 			//例外コンポがない場合
 			{
@@ -648,4 +678,21 @@ if ( !flag )
 		scriptFileName.open();
 		eval(scriptFileName.read());
 		scriptFileName.close();
+}
+
+// **** FUNCTION ******************************************************************************************************************
+//		捕まえた例外を必ず画面に出す（ランチャー経由でも消えないように）
+		function reportScriptError( err )
+{
+		try { app.endUndoGroup(); } catch ( e ) {}// 開いたままのundoグループを閉じる
+
+		var msg = ( err && err.message ) ? err.message : String( err );
+		if ( err && err.line ) { msg += "\n" + "line : " + err.line; }
+		if ( err && err.fileName ) { msg += "\n" + "file : " + File.decode( err.fileName ); }
+
+		alert( curScriptName + " stopped." + "\n" + "\n" + msg, curScriptName );
+
+		clearOutput();
+		writeLn( curScriptName + " : stopped by an error" );
+		writeLn( msg );
 }

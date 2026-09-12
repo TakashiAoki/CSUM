@@ -1,12 +1,14 @@
 // ============================================
 // Script Name : KeyOptimizer
-// Version     : v2.2
+// Version     : v2.3
 // 仕様        : 選択レイヤーの連続した同一値キーフレームを整理（イーズ・補間を保持）し、コンポ開始フレームを1に揃える
 // Copyright   : Over Ray Studio
 // Author      : Takashi Aoki
-// LastUpdate  : 2026-06-03
+// LastUpdate  : 2026-09-12
 // ============================================
 //
+// v2.3 変更点:
+//   - ランチャー（CL_Extra / KBar 等）経由でも例外が見えるよう ERROR GUARD を追加。
 // v2.2 変更点:
 //   - 高速化：全キー値を一度だけ読んで配列にキャッシュし、比較・冗長抽出をJS側で実施。
 //     keyValue() の DOM 呼び出しを 1キー最大4回→1回に削減。挙動は不変。
@@ -26,6 +28,14 @@
 //   - 全キー同値・単一キーは静的値化（アニメ不要キーを削除）。Time Remapping は保護。
 
 var curScriptName = "KeyOptimizer";
+
+// **** ERROR GUARD ***************************************************************************************************************
+//		ランチャー（CL_Extra / KBar 等）のボタンから起動すると、ScriptUIのイベントハンドラ内で起きた
+//		例外を After Effects は報告しない＝失敗しても「黙って終わった」ようにしか見えない
+//		（実測と経緯 = docs/INCIDENTS.md 2026-09-03／型の見本 = EditCompSettings.jsx v5.4）。
+//		実行ブロック全体をここで囲み、例外は必ず自前で alert に出す。
+try {
+
 var curScriptVersion = "v2.2";
 var KEY_VALUE_PRECISION = 3;// 同値判定の丸め桁数（小数N桁）。これ以下の差は「同じ」とみなす。AEC4Dの浮動小数ノイズ対策
 var KEY_VALUE_FACTOR = Math.pow( 10, KEY_VALUE_PRECISION );// 丸め係数（ループ外退避）
@@ -67,6 +77,8 @@ var MSG_REMOVED_SUF = " key(s) removed";
 		writeLn( removeKeysCount + MSG_REMOVED_SUF );
 	}
 
+} catch ( err ) { reportScriptError( err ); }
+// **** ERROR GUARD END ***********************************************************************************************************
 // **** FUNCTION ******************************************************************************************************************
 //		処理時間計算
 		function ProcessTimeCalculatStart()
@@ -257,4 +269,21 @@ var MSG_REMOVED_SUF = " key(s) removed";
 	scriptFileName.open();
 	eval( scriptFileName.read() );
 	scriptFileName.close();
+}
+
+// **** FUNCTION ******************************************************************************************************************
+//		捕まえた例外を必ず画面に出す（ランチャー経由でも消えないように）
+		function reportScriptError( err )
+{
+		try { app.endUndoGroup(); } catch ( e ) {}// 開いたままのundoグループを閉じる
+
+		var msg = ( err && err.message ) ? err.message : String( err );
+		if ( err && err.line ) { msg += "\n" + "line : " + err.line; }
+		if ( err && err.fileName ) { msg += "\n" + "file : " + File.decode( err.fileName ); }
+
+		alert( curScriptName + " stopped." + "\n" + "\n" + msg, curScriptName );
+
+		clearOutput();
+		writeLn( curScriptName + " : stopped by an error" );
+		writeLn( msg );
 }

@@ -1,14 +1,21 @@
 // ============================================
 // Script Name : CSUM_GotoTime
-// Version     : v1.7
+// Version     : v1.8
 // 仕様        : 数値と四則演算子(+-*/)でタイムラインを指定時間に移動(アニメ撮影 1コマ目スタート前提)
 // Copyright   : Over Ray Studio
 // Author      : Takashi Aoki
-// LastUpdate  : 2026-05-09
+// LastUpdate  : 2026-09-12
 // ============================================
 
 (function () {
 	var curScriptName = "CSUM_GotoTime";
+
+	// **** ERROR GUARD ***************************************************************************************************************
+	//		ランチャー（CL_Extra / KBar 等）のボタンから起動すると、ScriptUIのイベントハンドラ内で起きた
+	//		例外を After Effects は報告しない＝失敗しても「黙って終わった」ようにしか見えない
+	//		（実測と経緯 = docs/INCIDENTS.md 2026-09-03／型の見本 = EditCompSettings.jsx v5.4）。
+	//		実行ブロック全体をここで囲み、例外は必ず自前で alert に出す。
+	try {
 
 	if ( !( app.project != null && app.project.activeItem != null && app.project.activeItem instanceof CompItem ) ) { return; }
 
@@ -35,6 +42,8 @@
 		app.endUndoGroup();
 	}
 
+	} catch ( err ) { reportScriptError( err ); }
+	// **** ERROR GUARD END ***********************************************************************************************************
 	// **** FUNCTION ******************************************************************************************************************
 	//		ヘルプ表示
 	function ShowHelpDialog() {
@@ -267,5 +276,21 @@
 		if ( gtt < 0      ) { gtt = 0;      }
 		if ( gtt > maxSec ) { gtt = maxSec; }
 		activeComp.time = gtt;
+	}
+
+	// **** FUNCTION ******************************************************************************************************************
+	//		捕まえた例外を必ず画面に出す（ランチャー経由でも消えないように）
+	function reportScriptError( err ) {
+		try { app.endUndoGroup(); } catch ( e ) {}// 開いたままのundoグループを閉じる
+
+		var msg = ( err && err.message ) ? err.message : String( err );
+		if ( err && err.line ) { msg += "\n" + "line : " + err.line; }
+		if ( err && err.fileName ) { msg += "\n" + "file : " + File.decode( err.fileName ); }
+
+		alert( curScriptName + " stopped." + "\n" + "\n" + msg, curScriptName );
+
+		clearOutput();
+		writeLn( curScriptName + " : stopped by an error" );
+		writeLn( msg );
 	}
 })();
